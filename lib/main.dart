@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haveloc/provider/intern_provider.dart';
 import 'package:provider/provider.dart';
 import '../screens/bottom_navigation.dart';
 import './provider/fulltime_provider.dart';
@@ -16,8 +17,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => FulltimeProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: FulltimeProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: InternProvider(),
+        ),
+        // ChangeNotifierProvider.value(
+        //   value: Orders(),
+        // ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'haveloc',

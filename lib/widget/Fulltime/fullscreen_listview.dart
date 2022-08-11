@@ -242,7 +242,7 @@ class _ListViewFullTimeState extends State<ListViewFullTime> {
               child: MediaQuery.removePadding(
                 removeTop: true,
                 context: context,
-                child:_posts.isEmpty
+                child:_isFirstLoadRunning
                     ? const Center(
                   child: CircularProgressIndicator(),
                 )

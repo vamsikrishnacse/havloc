@@ -40,59 +40,62 @@ class SearchUser extends SearchDelegate<String> {
             );
           }
           List<FullTimee>? data = snapshot.data;
-          return ListView.builder(
-              itemCount: data?.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Row(
-                    children: [
-                      // Container(
-                      //   width: 60,
-                      //   height: 60,
-                      //   decoration: BoxDecoration(
-                      //     color: Colors.deepPurpleAccent,
-                      //     borderRadius: BorderRadius.circular(10),
-                      //   ),
-                      //   child: Center(
-                      //     child: Text(
-                      //       '${data[index].jobtitle}',
-                      //       style: TextStyle(
-                      //           fontSize: 20,
-                      //           fontWeight: FontWeight.bold,
-                      //           color: Colors.white),
-                      //       overflow: TextOverflow.clip,
-                      //     ),
-                      //   ),
-                      // ),
-                      SizedBox(width: 20),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 350,
-                              child: Text(
-                                '${data?[index].jobtitle}',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                softWrap: false,
+          return Padding(
+            padding: const EdgeInsets.only(top:25.0),
+            child: ListView.builder(
+                itemCount: data?.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Row(
+                      children: [
+                        // Container(
+                        //   width: 60,
+                        //   height: 60,
+                        //   decoration: BoxDecoration(
+                        //     color: Colors.deepPurpleAccent,
+                        //     borderRadius: BorderRadius.circular(10),
+                        //   ),
+                        //   child: Center(
+                        //     child: Text(
+                        //       '${data[index].jobtitle}',
+                        //       style: TextStyle(
+                        //           fontSize: 20,
+                        //           fontWeight: FontWeight.bold,
+                        //           color: Colors.white),
+                        //       overflow: TextOverflow.clip,
+                        //     ),
+                        //   ),
+                        // ),
+                        SizedBox(width: 20),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 350,
+                                child: Text(
+                                  '${data?[index].jobtitle}',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  softWrap: false,
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                '${data?[index].companyname}',
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '${data?[index].companyname}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ])
-                    ],
-                  ),
-                );
-              });
+                            ])
+                      ],
+                    ),
+                  );
+                }),
+          );
         });
   }
 

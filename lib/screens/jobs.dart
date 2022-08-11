@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haveloc/provider/intern_provider.dart';
 import 'package:haveloc/screens/top_navigation_jobs.dart';
 import 'package:provider/provider.dart';
 
@@ -13,25 +14,26 @@ class Jobs extends StatefulWidget {
 }
 
 class _JobsState extends State<Jobs> {
-  var _isInit =true;
-  // // @override
-  // // void initState() {
+  // var _isInit =true;
+  // // // @override
+  // // // void initState() {
+  // // //
+  // // //   Future.delayed(Duration.zero).then((_) {
+  // // //     Provider.of<FulltimeProvider>(context).getData();
+  // // //   });
+  // // //   super.initState();
+  // // // }
   // //
-  // //   Future.delayed(Duration.zero).then((_) {
-  // //     Provider.of<FulltimeProvider>(context).getData();
-  // //   });
-  // //   super.initState();
-  // // }
+  // @override
+  // void didChangeDependencies() {
+  //   if (_isInit) {
   //
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-
-      Provider.of<FulltimeProvider>(context).getData();
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
+  //     Provider.of<FulltimeProvider>(context).getData();
+  //     Provider.of<InternProvider>(context).getData();
+  //   }
+  //   _isInit = false;
+  //   super.didChangeDependencies();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

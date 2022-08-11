@@ -55,7 +55,7 @@ class _JobNavigationState extends State<JobNavigation> with TickerProviderStateM
                   padding: const EdgeInsets.only(left: 8,top: 10),
                   child: Text(title,
                       style: const TextStyle(
-                        fontSize: 30,
+                        fontSize: 27,
                         color: blueee,
                       ) //TextStyle
                       ),

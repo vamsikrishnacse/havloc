@@ -22,6 +22,25 @@ class FullTimew extends StatefulWidget {
 }
 
 class FullTimewState extends State {
+  var _isInit =true;
+  // // @override
+  // // void initState() {
+  // //
+  // //   Future.delayed(Duration.zero).then((_) {
+  // //     Provider.of<FulltimeProvider>(context).getData();
+  // //   });
+  // //   super.initState();
+  // // }
+  //
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+
+      Provider.of<FulltimeProvider>(context).getData();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     // final productsData = Provider.of<FulltimeProvider>(context);

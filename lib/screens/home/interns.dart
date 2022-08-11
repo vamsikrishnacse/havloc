@@ -1,7 +1,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../provider/intern_provider.dart';
 import '../../widget/Fulltime/fullscreen_listview.dart';
+import '../../widget/INterns/Interns_listview.dart';
 
 class Myapp extends StatelessWidget {
 
@@ -22,6 +25,25 @@ class Interns extends StatefulWidget {
 }
 
 class InternsState extends State {
+  var _isInit =true;
+  // // @override
+  // // void initState() {
+  // //
+  // //   Future.delayed(Duration.zero).then((_) {
+  // //     Provider.of<FulltimeProvider>(context).getData();
+  // //   });
+  // //   super.initState();
+  // // }
+  //
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+
+      Provider.of<InternProvider>(context).getData();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     // final productsData = Provider.of<FulltimeProvider>(context);
@@ -52,10 +74,10 @@ class InternsState extends State {
     //   });
     // }
 
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
-      body:  ListViewFullTime(),
+      body:  ListViewintern(),
     );
   }
 }

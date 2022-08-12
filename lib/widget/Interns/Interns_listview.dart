@@ -233,6 +233,6 @@ class _ListViewinternState extends State<ListViewintern> {
           ],
         ),
       ),
-    );;
+    );
   }
 }

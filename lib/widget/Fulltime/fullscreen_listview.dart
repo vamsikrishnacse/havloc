@@ -5,13 +5,19 @@ import 'package:haveloc/widget/Fulltime/searchbar_fulltime.dart';
 import 'package:provider/provider.dart';
 import 'package:haveloc/provider/fulltime_provider.dart';
 
+import '../../screens/fulltimescreen.dart';
+
 class ListViewFullTime extends StatefulWidget {
   @override
   State<ListViewFullTime> createState() => _ListViewFullTimeState();
 }
 
 class _ListViewFullTimeState extends State<ListViewFullTime> {
-  FulltimeProvider _userList = FulltimeProvider();
+
+  // void selectCategory(BuildContext ctx) {
+  //
+  // }
+
 
   Future<void> _refresh(BuildContext context) async {
     _posts.clear();
@@ -107,7 +113,7 @@ class _ListViewFullTimeState extends State<ListViewFullTime> {
         Provider.of<FulltimeProvider>(context, listen: false);
         final List<FullTimee> fetchedPosts = productsDatal2.full;
 
-        if (fetchedPosts.isNotEmpty) {
+        if (fetchedPosts.isNotEmpty  ) {
           setState(() {
             print('Body: $fetchedPosts');
             _posts.addAll(fetchedPosts);
@@ -250,146 +256,155 @@ class _ListViewFullTimeState extends State<ListViewFullTime> {
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
                   itemCount: _posts.length,
-                  itemBuilder: (_, index) {
+                  itemBuilder: (context, index) {
                     return Padding(
                         padding:
                         const EdgeInsets.fromLTRB(10, 0, 10, 0.5),
-                        child: Card(
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(
-                                color: Colors.grey, width: 0.4),
-                            borderRadius: BorderRadius.circular(10),
+                        child: InkWell(
+                          onTap: () =>  Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) {
+                                return FullTimeScreen(_posts[index].id);
+                              },
+                            ),
                           ),
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 5,
-                          ),
-                          child: Container(
-                            padding:
-                            const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                            child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                Text(_posts[index].jobtitle,
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      0, 8, 8, 8),
-                                  child: Text(_posts[index].companyname,
-                                      style:
-                                      const TextStyle(fontSize: 18)),
-                                ),
-                                Padding(
-                                  padding:
-                                  EdgeInsets.fromLTRB(0, 8, 8, 4),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.location_on_outlined,
-                                        color: Colors.grey[600],
-                                        size: 17,
-                                      ),
-                                      Text(
-                                        _posts[index].location,
-                                        style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 15),
-                                      ),
-                                    ],
+                          child: Card(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  color: Colors.grey, width: 0.4),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            margin: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 5,
+                            ),
+                            child: Container(
+                              padding:
+                              const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Text(_posts[index].jobtitle,
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0, 8, 8, 8),
+                                    child: Text(_posts[index].companyname,
+                                        style:
+                                        const TextStyle(fontSize: 18)),
                                   ),
-                                ),
-                                Padding(
-                                  padding:
-                                  EdgeInsets.fromLTRB(0, 6, 8, 4),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.currency_rupee,
-                                        color: Colors.grey[600],
-                                        size: 17,
-                                      ),
-                                      Text(
-                                        "CTC :  ",
-                                        style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 15),
-                                      ),
-                                      Text(
-                                        '\u{20B9}${_posts[index].maxctc}',
-                                        style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 15),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                  EdgeInsets.fromLTRB(0, 4, 8, 8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.calendar_month_rounded,
-                                        color: Colors.grey[600],
-                                        size: 17,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(
-                                                10)),
-                                        child: Text(
-                                          " Apply By  :  ",
+                                  Padding(
+                                    padding:
+                                    EdgeInsets.fromLTRB(0, 10, 8, 4),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.location_on_outlined,
+                                          color: Colors.grey[600],
+                                          size: 17,
+                                        ),
+                                        Text(
+                                          _posts[index].location,
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 15),
                                         ),
-                                      ),
-                                      Text(
-                                        _posts[index].jobapplyby,
-                                        style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 15),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      0, 12, 8, 4),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        _posts[index].jobstatus,
-                                        style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 15),
-                                      ),
-                                      Text(
-                                        _posts[index]
-                                            .appliedCount
-                                            .toString() +
-                                            "  Applicants",
-                                        style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 15),
-                                      )
-                                    ],
+                                  Padding(
+                                    padding:
+                                    EdgeInsets.fromLTRB(0, 8, 8, 4),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.currency_rupee,
+                                          color: Colors.grey[600],
+                                          size: 17,
+                                        ),
+                                        Text(
+                                          "CTC :  ",
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 15),
+                                        ),
+                                        Text(
+                                          '\u{20B9}${_posts[index].maxCtc}',
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 15),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                )
-                              ],
+                                  Padding(
+                                    padding:
+                                    EdgeInsets.fromLTRB(0, 6, 8, 8),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_month_rounded,
+                                          color: Colors.grey[600],
+                                          size: 17,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  10)),
+                                          child: Text(
+                                            " Apply By  :  ",
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                        Text(
+                                          _posts[index].jobapplyby,
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 15),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0, 12, 8, 4),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          _posts[index].jobstatus,
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 15),
+                                        ),
+                                        Text(
+                                          _posts[index]
+                                              .appliedCount
+                                              .toString() +
+                                              "  Applicants",
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 15),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ));

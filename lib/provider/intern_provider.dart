@@ -34,7 +34,7 @@ class InternProvider with ChangeNotifier {
   late FullTimeep _pages ;
   static const fulltime = 'https://my-json-server.typicode.com/vamsikrishnacse/fulltime/db';
 
-  Future<void> getData() async {
+  Future<List<FullTimee>> getData() async {
     final url = Uri.parse(fulltime);
     try {
       // final headers = {"Content-type": "application/json",
@@ -45,7 +45,7 @@ class InternProvider with ChangeNotifier {
       if (response.statusCode == 200) {
 
         data = jsonDecode(response.body)["_embedded"]["entityModels"] as List ;
-        _full =data.map<FullTimee>(FullTimee.fromJson).toList();
+        _full =data.map<FullTimee>((json) => FullTimee.fromJson(json)).toList();
 
         final data2=
         json.decode(response.body)['_links']["next"] ;
@@ -72,7 +72,7 @@ class InternProvider with ChangeNotifier {
       print('error: $e');
     }
     notifyListeners();
-    // return _full;
+    return _full;
   }
 
   Future<void> getlist(String link) async {
@@ -83,7 +83,7 @@ class InternProvider with ChangeNotifier {
       if (response.statusCode == 200) {
 
         data = jsonDecode(response.body)["_embedded"]["entityModels"] as List ;
-        _full =data.map<FullTimee>(FullTimee.fromJson).toList();
+        _full =data.map<FullTimee>((json) => FullTimee.fromJson(json)).toList();
         print('Body: $data');
         final data2=
         json.decode(response.body)['_links']["next"] ;

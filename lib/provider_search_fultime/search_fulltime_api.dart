@@ -15,7 +15,8 @@ class FulltimeList {
       if (response.statusCode == 200) {
 
         data = json.decode(response.body)["_embedded"]["entityModels"] as List;
-        results = data.map<FullTimee>(FullTimee.fromJson).toList();
+        results = data.map<FullTimee>((json) => FullTimee.fromJson(json)).toList();
+        print("search");
         if (query!= null){
           results = results.where((element) => element.companyname.toLowerCase().contains((query.toLowerCase()))).toList();
         }

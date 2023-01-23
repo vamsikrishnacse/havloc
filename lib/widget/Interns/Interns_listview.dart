@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/fulltime_model.dart';
 import '../../provider/intern_provider.dart';
 import '../Fulltime/searchbar_fulltime.dart';
 
@@ -13,17 +14,154 @@ class ListViewintern extends StatefulWidget {
 }
 
 class _ListViewinternState extends State<ListViewintern> {
+
   Future<void> _refresh(BuildContext context) async {
-    await Provider.of<InternProvider>(context, listen: false).getData();
+    _posts.clear();
+    // There is next page or not
+    _hasNextPage = true;
+
+    // Used to display loading indicators when _firstLoad function is running
+    _isFirstLoadRunning = false;
+
+    // Used to display loading indicators when _loadMore function is running
+    _isLoadMoreRunning = false;
+    links.clear();
+    pages.clear();
+    _posts = await Provider.of<InternProvider>(context, listen: false).getData();
+    setState((){
+
+    });
+  }
+
+  // At the beginning, we fetch the first 20 posts
+  int _page = 0;
+
+  // you can change this value to fetch more or less posts per page (10, 15, 5, etc)
+  final int _limit = 20;
+
+  // There is next page or not
+  bool _hasNextPage = true;
+
+  // Used to display loading indicators when _firstLoad function is running
+  bool _isFirstLoadRunning = false;
+
+  // Used to display loading indicators when _loadMore function is running
+  bool _isLoadMoreRunning = false;
+
+  // This holds the posts fetched from the server
+  List<FullTimee> _posts = [];
+  List links = [];
+  List pages = [];
+  late BuildContext _buildContext;
+
+  // This function will be called when the app launches (see the initState function)
+  void _firstLoad() async {
+    print("exec");
+    setState(() {
+      _isFirstLoadRunning = true;
+    });
+    try {
+      final productsDatai =
+      await Provider.of<InternProvider>(context, listen: false).getData();
+      // print(products);
+      setState(() {
+        _posts.clear();
+        _posts.addAll(productsDatai);
+        print(_posts);
+        print('in');
+      });
+    } catch (err) {
+      if (kDebugMode) {
+        print('Something went wrong');
+        print(err);
+      }
+    }
+
+    setState(() {
+      _isFirstLoadRunning = false;
+    });
+  }
+
+  void _loadMore() async {
+    if (_hasNextPage == true &&
+        _isFirstLoadRunning == false &&
+        _isLoadMoreRunning == false &&
+        _controller.position.extentAfter < 320) {
+      setState(() {
+        _isLoadMoreRunning = true; // Display a progress indicator at the bottom
+      });
+      _page += 1; // Increase _page by 1
+      try {
+        print("in");
+        final productsDatal =
+        Provider.of<InternProvider>(context, listen: false);
+        final products = productsDatal.linkes;
+        print(products);
+        await Provider.of<InternProvider>(context, listen: false)
+            .getlist(products.next);
+        final productsDatal2 =
+        Provider.of<InternProvider>(context, listen: false);
+        final List<FullTimee> fetchedPosts = productsDatal2.full;
+
+        if (fetchedPosts.isNotEmpty) {
+          setState(() {
+            print('Body: $fetchedPosts');
+            _posts.addAll(fetchedPosts);
+          });
+        } else {
+          // This means there is no more data
+          // and therefore, we will not send another GET request
+          setState(() {
+            _hasNextPage = false;
+          });
+        }
+      } catch (err) {
+        if (kDebugMode) {
+          print('Something went wrong!');
+        }
+      }
+
+      setState(() {
+        _isLoadMoreRunning = false;
+      });
+    }
+  }
+
+  // This function will be triggered whenver the user scroll
+  // to near the bottom of the list view
+
+  // The controller for the ListView
+  late ScrollController _controller;
+  // var _isInit = true;
+
+  @override
+  void initState() {
+
+    // Future.delayed(Duration.zero).then((_) {
+    //   Provider.of<FulltimeProvider>(context, listen: false).getData();
+    //   //
+    //   // _buildContext = context;
+    //     });
+
+    super.initState();
+    _controller = ScrollController()..addListener(_loadMore);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _firstLoad();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_loadMore);
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
-      final productsData = Provider.of<InternProvider>(context);
 
-      final posts = productsData.full;
     return RefreshIndicator(
       onRefresh: () => _refresh(context),
       child: SingleChildScrollView(
+        controller: _controller,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -58,14 +196,14 @@ class _ListViewinternState extends State<ListViewintern> {
               child: MediaQuery.removePadding(
                 removeTop: true,
                 context: context,
-                child:posts.isEmpty
+                child:_isFirstLoadRunning
                     ? const Center(
                   child: CircularProgressIndicator(),
                 )
                     : ListView.builder(
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
-                  itemCount: posts.length,
+                  itemCount: _posts.length,
                   itemBuilder: (_, index) {
                     return Padding(
                         padding:
@@ -88,41 +226,68 @@ class _ListViewinternState extends State<ListViewintern> {
                               crossAxisAlignment:
                               CrossAxisAlignment.start,
                               children: [
-                                Text(posts[index].jobtitle,
+                                Text(_posts[index].jobtitle,
                                     style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold)),
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(
                                       0, 8, 8, 8),
-                                  child: Text(posts[index].companyname,
+                                  child: Text(_posts[index].companyname,
                                       style:
                                       const TextStyle(fontSize: 18)),
                                 ),
                                 Padding(
                                   padding:
-                                  EdgeInsets.fromLTRB(0, 8, 8, 4),
+                                  EdgeInsets.fromLTRB(0, 10, 8, 4),
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Icon(
-                                        Icons.location_on_outlined,
-                                        color: Colors.grey[600],
-                                        size: 17,
-                                      ),
-                                      Text(
-                                        posts[index].location,
-                                        style: TextStyle(
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.location_on_outlined,
                                             color: Colors.grey[600],
-                                            fontSize: 15),
+                                            size: 17,
+                                          ),
+                                          Text(
+                                            _posts[index].location,
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 15),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 79.0),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.hourglass_bottom_outlined,
+                                                  color: Colors.grey[600],
+                                                  size: 17,
+                                                ),
+                                                Text(
+                                                  "Duration : ",
+                                                  style: TextStyle(
+                                                      color: Colors.grey[600],
+                                                      fontSize: 15),
+                                                ),
+                                                Text(
+                                                  '6 Months',
+                                                  style: TextStyle(
+                                                      color: Colors.grey[600],
+                                                      fontSize: 15),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
                                 Padding(
                                   padding:
-                                  EdgeInsets.fromLTRB(0, 6, 8, 4),
+                                  EdgeInsets.fromLTRB(0, 8, 8, 4),
                                   child: Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.start,
@@ -133,13 +298,13 @@ class _ListViewinternState extends State<ListViewintern> {
                                         size: 17,
                                       ),
                                       Text(
-                                        "CTC :  ",
+                                        "Stipend :  ",
                                         style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 15),
                                       ),
                                       Text(
-                                        '\u{20B9}${posts[index].maxctc}',
+                                        '\u{20B9}${_posts[index].maxCtc}',
                                         style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 15),
@@ -149,7 +314,7 @@ class _ListViewinternState extends State<ListViewintern> {
                                 ),
                                 Padding(
                                   padding:
-                                  EdgeInsets.fromLTRB(0, 4, 8, 8),
+                                  EdgeInsets.fromLTRB(0, 6, 8, 8),
                                   child: Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.start,
@@ -172,7 +337,7 @@ class _ListViewinternState extends State<ListViewintern> {
                                         ),
                                       ),
                                       Text(
-                                        posts[index].jobapplyby,
+                                        _posts[index].jobapplyby,
                                         style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 15),
@@ -188,13 +353,13 @@ class _ListViewinternState extends State<ListViewintern> {
                                     MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        posts[index].jobstatus,
+                                        _posts[index].jobstatus,
                                         style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 15),
                                       ),
                                       Text(
-                                        posts[index]
+                                        _posts[index]
                                             .appliedCount
                                             .toString() +
                                             "  Applicants",
@@ -214,22 +379,22 @@ class _ListViewinternState extends State<ListViewintern> {
               ),
             ),
             // when the _loadMore function is running
-            // if (_isLoadMoreRunning == true)
-            //   const Padding(
-            //     padding: EdgeInsets.only(top: 10, bottom: 40),
-            //     child: Center(
-            //       child: CircularProgressIndicator(),
-            //     ),
-            //   ),
-            // // When nothing else to load
-            // if (_hasNextPage == false)
-            //   Container(
-            //     padding: const EdgeInsets.only(top: 30, bottom: 40),
-            //     color: Colors.amber,
-            //     child: const Center(
-            //       child: Text('You have fetched all of the content'),
-            //     ),
-            //   ),
+            if (_isLoadMoreRunning == true)
+              const Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 40),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            // When nothing else to load
+            if (_hasNextPage == false)
+              Container(
+                padding: const EdgeInsets.only(top: 30, bottom: 40),
+                color: Colors.amber,
+                child: const Center(
+                  child: Text('You have fetched all of the content'),
+                ),
+              ),
           ],
         ),
       ),

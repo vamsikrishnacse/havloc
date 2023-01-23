@@ -45,19 +45,19 @@ class FulltimeProvider with ChangeNotifier {
       if (response.statusCode == 200) {
 
         data = jsonDecode(response.body)["_embedded"]["entityModels"] as List ;
-         _full =data.map<FullTimee>(FullTimee.fromJson).toList();
+         _full = data.map<FullTimee>((json) => FullTimee.fromJson(json)).toList();
 
          final data2=
         json.decode(response.body)['_links']["next"] ;
         // final jsonValue = json.decode(data2);
         // final jsonValue2 = json.decode(jsonValue);
-        _linkes = new FullTimeel.fromJson(data2);
+        _linkes =  FullTimeel.fromJson(data2);
         print('links');
         print('Body: ${_linkes.next}');
         final data3=
         json.decode(response.body)['page'] ;
         // final jsonValuep = json.decode(data2);
-       _pages = new FullTimeep.fromJson(data3);
+       _pages =  FullTimeep.fromJson(data3);
         print('Body: ${_pages.size}');
 
           print('Status code: ${response.statusCode}');
@@ -76,6 +76,7 @@ class FulltimeProvider with ChangeNotifier {
   }
 
   Future<void> getlist(String link) async {
+    _full.clear();
     print(link);
     var url = Uri.parse(link);
     try {
@@ -83,18 +84,18 @@ class FulltimeProvider with ChangeNotifier {
       if (response.statusCode == 200) {
 
         data = jsonDecode(response.body)["_embedded"]["entityModels"] as List ;
-        _full =data.map<FullTimee>(FullTimee.fromJson).toList();
+        _full =data.map<FullTimee>((json) => FullTimee.fromJson(json)).toList();
         print('Body: $data');
         final data2=
         json.decode(response.body)['_links']["next"] ;
         // final jsonValue = json.decode(data2);
         // final jsonValue2 = json.decode(jsonValue);
-        _linkes = new FullTimeel.fromJson(data2);
+        _linkes =  FullTimeel.fromJson(data2);
         print('Body: $_linkes');
         final data3=
         json.decode(response.body)['page'] ;
         // final jsonValuep = json.decode(data2);
-        _pages = new FullTimeep.fromJson(data3);
+        _pages =  FullTimeep.fromJson(data3);
         // if (query!= null){
         //   results = results.where((element) => element.companyname.toLowerCase().contains((query.toLowerCase()))).toList();
         // }
